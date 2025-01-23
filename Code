@@ -52,6 +52,7 @@ void schedule_appointment();
 void assign_doctor();
 void update_appointment_status();
 void add_doctor();
+void display_appointments();
 int validate_patient_id(int id);
 int validate_doctor_id(int id);
 int validate_date(const char* date);
@@ -69,24 +70,27 @@ int main() {
                 add_patient();
                 break;
             case 2:
-                display_patients();
-                break;
-            case 3:
-                search_patient();
-                break;
-            case 4:
-                schedule_appointment();
-                break;
-            case 5:
-                assign_doctor();
-                break;
-            case 6:
-                update_appointment_status();
-                break;
-            case 7:
                 add_doctor();
                 break;
+            case 3:
+                display_patients();
+                break;
+            case 4:
+                search_patient();
+                break;
+            case 5:
+                schedule_appointment();
+                break;
+            case 6:
+                assign_doctor();
+                break;
+            case 7:
+                update_appointment_status();
+                break;
             case 8:
+                display_appointments();
+                break;
+            case 9:
                 printf("Exiting...\n");
                 exit(0);
             default:
@@ -100,13 +104,14 @@ int main() {
 void show_menu() {
     printf("\nHospital Management System\n");
     printf("1. Add New Patient\n");
-    printf("2. Display Patient Details\n");
-    printf("3. Search for Patient\n");
-    printf("4. Schedule Appointment\n");
-    printf("5. Assign Doctor to Patient\n");
-    printf("6. Update Appointment Status\n");
-    printf("7. Add New Doctor\n");
-    printf("8. Exit\n");
+    printf("2. Add New Doctor\n");
+    printf("3. Display Patient Details\n");
+    printf("4. Search for Patient\n");
+    printf("5. Schedule Appointment\n");
+    printf("6. Assign Doctor to Patient\n");
+    printf("7. Update Appointment Status\n");
+    printf("8. View All Appointments\n");
+    printf("9. Exit\n");
     printf("Enter your choice: ");
 }
 
@@ -130,6 +135,24 @@ void add_patient() {
 
     patients[patient_count++] = p;
     printf("Patient added successfully with ID %d.\n", p.id);
+}
+
+void add_doctor() {
+    if (doctor_count >= MAX_DOCTORS) {
+        printf("Doctor limit reached. Cannot add more doctors.\n");
+        return;
+    }
+
+    Doctor d;
+    d.id = doctor_count + 1;
+
+    printf("Enter doctor name: ");
+    scanf(" %[^\n]", d.name);
+    printf("Enter doctor specialization: ");
+    scanf(" %[^\n]", d.specialization);
+
+    doctors[doctor_count++] = d;
+    printf("Doctor added successfully with ID %d.\n", d.id);
 }
 
 void display_patients() {
@@ -287,22 +310,20 @@ void update_appointment_status() {
     printf("Appointment with ID %d not found.\n", appointment_id);
 }
 
-void add_doctor() {
-    if (doctor_count >= MAX_DOCTORS) {
-        printf("Doctor limit reached. Cannot add more doctors.\n");
+void display_appointments() {
+    if (appointment_count == 0) {
+        printf("No appointments available.\n");
         return;
     }
 
-    Doctor d;
-    d.id = doctor_count + 1;
-
-    printf("Enter doctor name: ");
-    scanf(" %[^\n]", d.name);
-    printf("Enter doctor specialization: ");
-    scanf(" %[^\n]", d.specialization);
-
-    doctors[doctor_count++] = d;
-    printf("Doctor added successfully with ID %d.\n", d.id);
+    for (int i = 0; i < appointment_count; i++) {
+        printf("\nAppointment ID: %d\n", appointments[i].id);
+        printf("Patient ID: %d\n", appointments[i].patient_id);
+        printf("Doctor ID: %d\n", appointments[i].doctor_id);
+        printf("Date: %s\n", appointments[i].date);
+        printf("Time: %s\n", appointments[i].time);
+        printf("Status: %s\n", appointments[i].status);
+    }
 }
 
 int validate_patient_id(int id) {
